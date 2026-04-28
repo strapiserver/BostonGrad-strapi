@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "unis",
+  "info": {
+    "singularName": "uni",
+    "pluralName": "unis",
+    "displayName": "Uni",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "header": {
+      "type": "string",
+      "required": true
+    },
+    "subheader": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::article.article"
+    },
+    "rank": {
+      "type": "integer"
+    }
+  }
+}
