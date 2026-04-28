@@ -23,6 +23,12 @@
     },
     {
       "action": "plugin::upload.content-api.upload"
+    },
+    {
+      "action": "api::uni.uni.find"
+    },
+    {
+      "action": "api::uni.uni.findOne"
     }
   ]
 }

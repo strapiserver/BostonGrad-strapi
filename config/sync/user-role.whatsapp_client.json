@@ -8,6 +8,12 @@
     },
     {
       "action": "api::physical-exchanger.physical-exchanger.findOne"
+    },
+    {
+      "action": "api::uni.uni.find"
+    },
+    {
+      "action": "api::uni.uni.findOne"
     }
   ]
 }

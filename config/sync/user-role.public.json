@@ -136,6 +136,12 @@
       "action": "api::text-box.text-box.findOne"
     },
     {
+      "action": "api::uni.uni.find"
+    },
+    {
+      "action": "api::uni.uni.findOne"
+    },
+    {
       "action": "api::top-parameter.top-parameter.find"
     },
     {

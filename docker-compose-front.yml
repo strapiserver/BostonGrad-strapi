@@ -16,6 +16,7 @@ services:
         NEXT_PUBLIC_TELEGRAM_CHAT: "${NEXT_PUBLIC_TELEGRAM_CHAT}"
         NEXT_PUBLIC_GOOGLE_MAPS_KEY: "${NEXT_PUBLIC_GOOGLE_MAPS_KEY}"
         USE_INTERNAL: "${USE_INTERNAL}"
+        IS_DEV: "${IS_DEV}"
         INTERNAL_CMS_URL: "${INTERNAL_CMS_URL}"
         INTERNAL_SERVER_URL: "${INTERNAL_SERVER_URL}"
         INTERNAL_CONVERTER_URL: "${INTERNAL_CONVERTER_URL}"
@@ -23,6 +24,7 @@ services:
       - .env
     environment:
       USE_INTERNAL: "${USE_INTERNAL}"
+      IS_DEV: "${IS_DEV}"
     ports:
       - "3000:3000"
     restart: always

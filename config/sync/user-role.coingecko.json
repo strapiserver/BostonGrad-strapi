@@ -29,6 +29,12 @@
     },
     {
       "action": "api::selector.selector.find"
+    },
+    {
+      "action": "api::uni.uni.find"
+    },
+    {
+      "action": "api::uni.uni.findOne"
     }
   ]
 }

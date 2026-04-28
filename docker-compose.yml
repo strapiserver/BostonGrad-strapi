@@ -18,7 +18,17 @@ services:
       - public:/opt/app/public
     ports:
       - "1337:1337"
+    networks:
+      - my-network
 
 volumes:
   public:
+    external: true
+    name: bostongrad_public
   data:
+    external: true
+    name: bostongrad_data
+
+networks:
+  my-network:
+    external: true

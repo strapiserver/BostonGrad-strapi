@@ -29,6 +29,7 @@ services:
         STRAPI_AUTH_PASSWORD: "${STRAPI_AUTH_PASSWORD:-}"
         # Build should use public URLs unless you explicitly override.
         USE_INTERNAL: "${FRONT_BUILD_USE_INTERNAL:-false}"
+        IS_DEV: "${FRONT_BUILD_IS_DEV:-false}"
         INTERNAL_CMS_URL: "${INTERNAL_CMS_URL:-}"
         INTERNAL_SERVER_URL: "${INTERNAL_SERVER_URL:-}"
         INTERNAL_CONVERTER_URL: "${INTERNAL_CONVERTER_URL:-}"
@@ -37,6 +38,7 @@ services:
     environment:
       DEBUG_EXCHANGER_MAP: "${DEBUG_EXCHANGER_MAP:-}"
       USE_INTERNAL: "${USE_INTERNAL:-false}"
+      IS_DEV: "${IS_DEV:-false}"
       INTERNAL_CMS_URL: "${INTERNAL_CMS_URL:-}"
       INTERNAL_SERVER_URL: "${INTERNAL_SERVER_URL:-}"
       INTERNAL_CONVERTER_URL: "${INTERNAL_CONVERTER_URL:-}"
