@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build/cache
+.cache/
+build/
+dist/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Runtime files
+*.log
+.DS_Store
+.strapi-updater.json
+
+# Local database/files (adjust if you intentionally version these)
+.tmp/
+.sqlite/
+*.db
+*.sqlite
+data/
+_backup/
+_backup_older/
+initial/backups/
+
+# Uploads generated in local dev
+public/uploads/

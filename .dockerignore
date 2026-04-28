@@ -1,0 +1,15 @@
+node_modules
+build
+.cache
+.git
+.github
+data
+*.db
+*.db-*
+data.db*
+.env
+.tmp
+tmp
+npm-debug.log*
+yarn-error.log*
+initial/backups

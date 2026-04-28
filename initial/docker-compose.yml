@@ -1,0 +1,175 @@
+services:
+  strapi:
+    container_name: strapi
+    image: darkshrine/strapi:latest
+    # build:
+    #   context: ./
+    #   dockerfile: ./Dockerfile
+    restart: always
+    env_file: .env
+    environment:
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: strapiDB
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PORT: ${DATABASE_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      NODE_ENV: ${NODE_ENV}
+    volumes:
+      # - ./src:/opt/app/src
+      # - ./package.json:/opt/package.json
+      # - ./yarn.lock:/opt/yarn.lock
+
+      - ./.env:/opt/app/.env
+      - config:/opt/app/config # all settings here Config Sync
+      - public:/opt/app/public
+    ports:
+      - "1337:1337"
+    networks:
+      - my-network
+    depends_on:
+      - strapiDB
+
+  strapiDB:
+    container_name: strapiDB
+    image: postgres:12.0-alpine
+    platform: linux/amd64 # for platform error on Apple M1 chips
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    deploy:
+      resources:
+        limits:
+          memory: 900M
+          cpus: "0.9"
+    memswap_limit: 1g
+    mem_limit: 900M
+    volumes:
+      - strapi-data:/var/lib/postgresql/data/
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    networks:
+      - my-network
+
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   env_file: .env
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${DEFAULT_MAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PASSWORD}
+  #     PGADMIN_LISTEN_PORT: 80
+  #   ports:
+  #     - "5433:80"
+  #   networks:
+  #     - my-network
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+  #   links:
+  #     - "strapiDB:strapiDB"
+
+  converter:
+    container_name: converter
+    image: darkshrine/converter:latest
+    restart: always
+    env_file: .env
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      STRAPI: ${STRAPI}
+      EXCHANGERATESAPI_URL: ${EXCHANGERATESAPI_URL}
+    ports:
+      - "5001:5001"
+    networks:
+      - my-network
+    depends_on:
+      - strapi
+
+  # parser:
+  #   container_name: parser
+  #   image: darkshrine/parser:latest
+  #   restart: always
+  #   env_file: .env
+  #   environment:
+  #     LOOP: ${LOOP}
+  #     STRAPI: ${STRAPI}
+  #   ports:
+  #     - "5000:5000"
+  #   networks:
+  #     - my-network
+  #   depends_on:
+  #     - strapi
+
+  # telegram_bot:
+  #   container_name: telegram_bot
+  #   image: darkshrine/telegram_bot:latest
+  #   restart: always
+  #   env_file: .env
+  #   environment:
+  #     NODE_ENV: ${NODE_ENV}
+  #     STRAPI: ${STRAPI}
+  #     BOT_TOKEN: ${TG_BOT_TOKEN}
+  #   ports:
+  #     - "5002:5002"
+  #   networks:
+  #     - my-network
+  #   depends_on:
+  #     - strapi
+
+  npm:
+    container_name: npm
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80" # HTTP
+      - "81:81" # admin@example.com changeme
+      - "443:443" # HTTPS
+    volumes:
+      - npm-data:/data
+      - npm-letsencrypt:/etc/letsencrypt
+    networks:
+      - my-network
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - nginx-html:/usr/share/nginx/html
+    depends_on:
+      - npm
+    networks:
+      - my-network
+
+  # backup:
+  #   image: alpine:latest
+  #   volumes:
+  #     - ./backup.sh:/backup.sh # Maps the script directly
+  #     - strapi-data:/var/lib/docker/volumes/strapi-data/_data
+  #     - pgadmin-data:/var/lib/docker/volumes/pgadmin-data/_data
+  #     # Add all your volumes here
+  #   entrypoint: /bin/sh
+  #   command: -c "apk add --no-cache git bash && /backup.sh" # Install dependencies and run script
+  #   environment:
+  #     - GIT_COMMITTER_NAME=strapiserver
+  #     - GIT_COMMITTER_EMAIL=strapiserver@gmail.com
+
+volumes:
+  strapi-data:
+    name: strapi_strapi-data
+  # pgadmin-data:
+  config:
+  public:
+  npm-data:
+  npm-letsencrypt:
+  nginx-html:
+
+networks:
+  my-network:
+    name: my-network
+    driver: bridge
